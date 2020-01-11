@@ -29,18 +29,18 @@ public class Diagraph {
     }
 
     public static void main(String[] args) throws Exception{
-        WordNet wn = new WordNet("synsets.txt", "hypernyms.txt");
-        // System.out.println(wn.ht);
-        // System.out.println(wn.ht2);
-        // System.out.println(wn.ht.size());
-        System.out.println(wn.ht2.size());
-        Diagraph dg = new Diagraph(wn.ht2.size());
-        for (int i = 0; i < wn.ht2.size(); i++) {
-            for (int j = 0; j < wn.ht2.get(i).size(); j++) {
-                dg.addEdge(i, wn.ht2.get(i).get(j));
-            }
-        }
-        System.out.println(dg.e);
-        // dg.printGraph();
+        // WordNet wn = new WordNet("synsets.txt", "hypernyms.txt");
+        // // System.out.println(wn.ht);
+        // // System.out.println(wn.ht2);
+        // // System.out.println(wn.ht.size());
+        // System.out.println(wn.ht2.size());
+        // Diagraph dg = new Diagraph(wn.ht2.size());
+        // for (int i = 0; i < wn.ht2.size(); i++) {
+        //     for (int j = 0; j < wn.ht2.get(i).size(); j++) {
+        //         dg.addEdge(i, wn.ht2.get(i).get(j));
+        //     }
+        // }
+        // System.out.println(dg.e);
+        // // dg.printGraph();
     }
 }
