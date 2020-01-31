@@ -1,20 +1,29 @@
 import edu.princeton.cs.algs4.Picture;
 import java.awt.Color;
 import java.io.File;
-// import java.text.DecimalFormat;
 import java.util.Arrays;
-// import java.util.Scanner;
 import java.lang.IllegalArgumentException;
+/**.
+ * The class Seam Carver is about resizing images. 
+ */
 public class SeamCarver {
 
     private Picture picture;
     private double[][] engMatrix;
     // create a seam carver object based on the given picture
+    /**.
+     * Initializes the picture and creates the energy matrix.
+     * @param picture the picture to be resized.
+     */
     public SeamCarver(final Picture picture) {
         this.picture = new Picture(picture);
         createEnergy();
     }
 
+    /**.
+     * This is a helper method to calculate the energy at each pixel
+     * and creating the energy matrix. 
+     */
     private void createEnergy() {
         engMatrix = new double[height()][width()];
         for (int row = 0; row < height(); row++) {
@@ -23,34 +32,64 @@ public class SeamCarver {
             }
         }
     }
-    // current picture
+
+    /**.
+     * This method returns the current picture.
+     * @return the current picture.
+     */
     public Picture picture() {
         return picture;
     }
 
-    // width of current picture
+    /**.
+     * This method returns the width of the picture.
+     * @return the number of rows
+     */
     public int width() {
         return picture.width();
     }
 
-    // height of current picture
+    /**.
+     * This method returns the height of the picture.
+     * @return the number of rows.
+     */
     public int height() {
         return picture.height();
     }
 
+    /**.
+     * This method returns the red value of the pixel.
+     * @param rgb the rgb value of the pixel.
+     * @return the red value as integer.
+     */
     private int getRed(int rgb) {
         return (rgb >> 16) & 0xFF;
     }
 
+    /**.
+     * This method returns the green value of the pixel.
+     * @param rgb the rgb value of the pixel
+     * @return the green value as integer
+     */
     private int getGreen(int rgb) {
         return (rgb >> 8) & 0xFF;
     }
 
+    /**.
+     * This method returns the blue value of the pixel.
+     * @param rgb the rgb value of the pixel
+     * @return the blue value as integer
+     */
     private int getBlue(int rgb) {
         return (rgb >> 0) & 0xFF;
     }
 
-    // energy of pixel at column x and row y
+    /**.
+     * This method calculates the energy at the pixel
+     * @param x the column x
+     * @param y the row y
+     * @return the calculated energy at (x,y)
+     */
     public double energy(final int x, final int y) {
         if (x == 0 || y == 0 || x == picture.width() - 1 || y == picture.height() - 1) {
             return 1000.0;
@@ -66,6 +105,12 @@ public class SeamCarver {
         return Math.pow(x2_comp + y2_comp, 0.5);
     }
 
+    /**.
+     * This method calculates the cummilative energies and returns
+     * the cummilative energy matrix
+     * @param engMatrix the original energy matrix
+     * @return the updated cummilative energy matrix
+     */
     private double[][] cummMatrix(double[][] engMatrix) {
         double[][] cumm = new double[engMatrix.length][engMatrix[0].length];
         for (int i = 0; i < engMatrix[0].length; i++) {
@@ -98,7 +143,12 @@ public class SeamCarver {
         }
         return cumm;
     }
-    
+
+    /**.
+     * This method determines the transpose of the given matrix
+     * @param arr the cummilative energy matrix
+     * @return the transpose of the given matrix
+     */
     private double[][] transpose(double[][] arr) {
         double[][] tr = new double[arr[0].length][arr.length];
         for (int i = 0; i < arr.length; i++) {
@@ -109,7 +159,10 @@ public class SeamCarver {
         return tr;
     }
 
-    // sequence of indices for horizontal seam
+    /**.
+     * This method returns the sequence of indices for the horizontal seam
+     * @return the integer array containing the indices
+     */
     public int[] findHorizontalSeam() {
         if (engMatrix.length == 1) {
             int[] arr = new int[engMatrix[0].length];
@@ -121,7 +174,10 @@ public class SeamCarver {
         return vertices(transpose(engMatrix));
     }
 
-    // sequence of indices for vertical seam
+    /**.
+     * This method returns the sequence of indices for the vertical seam
+     * @return the integer array containing the indices
+     */
     public int[] findVerticalSeam() {
         if (engMatrix[0].length == 1) {
             int[] arr = new int[engMatrix.length];
@@ -134,6 +190,11 @@ public class SeamCarver {
         
     }
 
+    /**.
+     * This is a helper method which determines the indices on the seam.
+     * @param energy the updated cummilative energy matrix
+     * @return the integer array of indices
+     */
     private int[] vertices(double[][] energy) {
         int[] ver = new int[energy.length];
         double[][] cumm = cummMatrix(energy);
@@ -170,7 +231,11 @@ public class SeamCarver {
         }
         return ver;
     }
-    // remove horizontal seam from current picture
+
+    /**.
+     * This method removes the horizontal seam from the current picture
+     * @param seam the array of indices to be removed from the picture
+     */
     public void removeHorizontalSeam(final int[] seam) {
         if (seam.length > engMatrix[0].length || seam == null || engMatrix.length <= 1) {
             //throw exception
@@ -204,6 +269,10 @@ public class SeamCarver {
     }
 
     // remove vertical seam from current picture
+    /**.
+     * This method removes the vertical seam from the current picture
+     * @param seam the array of indices to be removed from the picture
+     */
     public void removeVerticalSeam(final int[] seam) {
         if (seam.length > engMatrix.length || seam == null || engMatrix[0].length <= 1) {
             //throw exception
